@@ -1,0 +1,342 @@
+<configuration scan="true" scanPeriod="60 seconds">
+	<statusListener class="ch.qos.logback.core.status.StatusListenerAsList" />
+	<property resource="mg-smtp.config" />
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n%ex
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="MGServerAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<filter class="com.iperia.vx.mg.gateway.log.RangeLevelFilter">
+			<minLevel>DEBUG</minLevel>
+			<maxLevel>ERROR</maxLevel>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %-5level - %msg%n%ex</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="IMAPAccountAppender" class="ch.qos.logback.classic.sift.SiftingAppender">
+		<discriminator class="com.iperia.vx.logging.AccountDiscriminator">
+			<Key>account-id</Key>
+			<DefaultValue>na</DefaultValue>
+		</discriminator>
+		<sift>
+			<appender name="MGFileAppender"
+				class="ch.qos.logback.core.rolling.RollingFileAppender">
+				<filter class="com.iperia.vx.mg.gateway.log.RangeLevelFilter">
+					<minLevel>TRACE</minLevel>
+					<maxLevel>ERROR</maxLevel>
+					<onMatch>ACCEPT</onMatch>
+					<onMismatch>DENY</onMismatch>
+				</filter>
+				<file>../logs/account/${account-id}/imap.log</file>
+				<encoder>
+					<pattern>%date{ISO8601} %m%n %ex</pattern>
+				</encoder>
+				<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+					<fileNamePattern>../logs/${account-id}/imap.%d{yyyy-MM-dd}.%i.log.gz
+					</fileNamePattern>
+					<maxHistory>5</maxHistory>
+					<timeBasedFileNamingAndTriggeringPolicy
+						class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+						<maxFileSize>10MB</maxFileSize>
+					</timeBasedFileNamingAndTriggeringPolicy>
+				</rollingPolicy>
+			</appender>
+		</sift>
+	</appender>
+	<appender name="MGFileAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="com.iperia.vx.mg.gateway.log.RangeLevelFilter">
+			<minLevel>TRACE</minLevel>
+			<maxLevel>ERROR</maxLevel>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>../logs/mobile-gateway.log</file>
+		<encoder>
+			<pattern>%date{ISO8601} %p [%t] %logger.%M - %m%n %ex</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>../logs/mobile-gateway.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<maxHistory>6</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+	<appender name="AccountAppender" class="ch.qos.logback.classic.sift.SiftingAppender">
+		<discriminator class="com.iperia.vx.logging.AccountDiscriminator">
+			<Key>account-id</Key>
+			<DefaultValue>na</DefaultValue>
+		</discriminator>
+		<sift>
+			<appender name="MGFileAppender"
+				class="ch.qos.logback.core.rolling.RollingFileAppender">
+				<filter class="com.iperia.vx.mg.gateway.log.RangeLevelFilter">
+					<minLevel>TRACE</minLevel>
+					<maxLevel>ERROR</maxLevel>
+					<onMatch>ACCEPT</onMatch>
+					<onMismatch>DENY</onMismatch>
+				</filter>
+				<file>../logs/account/${account-id}/mg.log</file>
+				<encoder>
+					<pattern>%date{ISO8601} %p [%t] %logger.%M - %m%n %ex</pattern>
+				</encoder>
+				<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+					<fileNamePattern>../logs/${account-id}/mg.%d{yyyy-MM-dd}.%i.log
+					</fileNamePattern>
+					<maxHistory>5</maxHistory>
+					<timeBasedFileNamingAndTriggeringPolicy
+						class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+						<maxFileSize>1MB</maxFileSize>
+					</timeBasedFileNamingAndTriggeringPolicy>
+				</rollingPolicy>
+			</appender>
+		</sift>
+	</appender>
+	<appender name="AccountTransactionsAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="com.iperia.vx.mg.gateway.log.RangeLevelFilter">
+			<minLevel>TRACE</minLevel>
+			<maxLevel>ERROR</maxLevel>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>../logs/crud.log</file>
+		<encoder>
+			<pattern>%date{ISO8601} %m%n %ex</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>../logs/crud.%d{yyyy-MM-dd}.%i.log.gz
+			</fileNamePattern>
+			<maxHistory>5</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+	
+	<appender name="WebServiceAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="com.iperia.vx.mg.gateway.log.RangeLevelFilter">
+			<minLevel>TRACE</minLevel>
+			<maxLevel>ERROR</maxLevel>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>../logs/ws-response.log</file>
+		<encoder>
+<!-- 			<pattern>%date{ISO8601} %m%n %ex</pattern> -->
+			<pattern>%t,%M,%m%n %ex</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>../logs/ws-response.%d{yyyy-MM-dd}.%i.log.gz
+			</fileNamePattern>
+			<maxHistory>5</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+	
+	<appender name="WSRequestLogAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="com.iperia.vx.mg.gateway.log.RangeLevelFilter">
+			<minLevel>TRACE</minLevel>
+			<maxLevel>ERROR</maxLevel>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>../logs/ws-req.log</file>
+		<encoder>
+<!-- 			<pattern>%date{ISO8601} %m%n %ex</pattern> -->
+			<pattern>%t,%M,%m%n %ex</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>../logs/ws-req.%d{yyyy-MM-dd}.%i.log.gz
+			</fileNamePattern>
+			<maxHistory>5</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+	
+	<appender name="VFSGCAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="com.iperia.vx.mg.gateway.log.RangeLevelFilter">
+			<minLevel>TRACE</minLevel>
+			<maxLevel>ERROR</maxLevel>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>../logs/vfs-gc.log</file>
+		<encoder>
+			<pattern>%date{ISO8601} %p [%t] %logger.%M - %m%n %ex</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>../logs/vfs-gc.%d{yyyy-MM-dd}.%i.log.gz
+			</fileNamePattern>
+			<maxHistory>6</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+	
+	<appender name="InvalidateFindResponse"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="com.iperia.vx.mg.gateway.log.RangeLevelFilter">
+			<minLevel>TRACE</minLevel>
+			<maxLevel>ERROR</maxLevel>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>../logs/invalidate-response.log</file>
+		<encoder>
+			<pattern>%date{ISO8601} %p [%t] %logger.%M - %m%n %ex</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>../logs/invalidate-response.%d{yyyy-MM-dd}.%i.log.gz
+			</fileNamePattern>
+			<maxHistory>6</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+	
+	<appender name="MethodTracerAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="com.iperia.vx.mg.gateway.log.RangeLevelFilter">
+			<minLevel>TRACE</minLevel>
+			<maxLevel>ERROR</maxLevel>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>../logs/method-tracer.log</file>
+		<encoder>
+<!-- 			<pattern>%date{ISO8601} %m%n %ex</pattern> -->
+			<pattern>%t,%M,%m%n %ex</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>../logs/method-tracer.%d{yyyy-MM-dd}.%i.log.gz
+			</fileNamePattern>
+			<maxHistory>5</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+
+	<appender name="EmailAppender" class="ch.qos.logback.classic.net.SMTPAppender">
+		<evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+			<marker>EMAIL_ADMIN</marker>
+		</evaluator>
+		<SMTPHost>${com.iperia.vx.mg.smtp.host}</SMTPHost>
+		<SMTPPort>${com.iperia.vx.mg.smtp.port}</SMTPPort>
+		<From>${com.iperia.vx.mg.watchdog.email-notification.from}</From>
+		<ssl>${com.iperia.vx.mg.smtp.isSSLEnabled}</ssl>
+		<Username>${com.iperia.vx.mg.smtp.userName}</Username>
+		<Password>${com.iperia.vx.mg.smtp.password}</Password>
+		<To>${com.iperia.vx.mg.watchdog.email-notification.to}</To>
+		<Subject>APP ERROR: %class{20} - %m</Subject>
+		<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+			<layout class="ch.qos.logback.classic.html.HTMLLayout">
+				<pattern>%date{ISO8601} %p [%t] %logger.%M - %m%n %ex</pattern>
+			</layout>
+		</encoder>
+		<cyclicBufferTracker class="ch.qos.logback.core.spi.CyclicBufferTrackerImpl">
+			<bufferSize>1</bufferSize>
+		</cyclicBufferTracker>
+	</appender>
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</root>
+	<logger name="Email" level="ERROR" additivity="false">
+		<appender-ref ref="EmailAppender" />
+	</logger>
+
+	<logger name="com.iperia.vx.mg.server" level="DEBUG" additivity="false">
+		<appender-ref ref="MGServerAppender" />
+		<appender-ref ref="EmailAppender" />
+	</logger>
+
+	<logger name="com.iperia" level="DEBUG" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<logger name="org.apache" level="ERROR" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<logger name="org.mortbay" level="ERROR" additivity="false">
+		<appender-ref ref="ERROR" />
+	</logger>
+
+	<logger name="account" level="DEBUG" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="AccountAppender" />
+		<appender-ref ref="MGFileAppender" />
+	</logger>
+
+	<logger name="com.iperia.webservices.soap.VxsaServlet" level="TRACE" />
+	<logger name="com.iperia.webservices.soap.handler.LoggingHandler"
+		level="ERROR" />
+	<logger name="com.iperia.webservices.soap.handler.FaultHandler"
+		level="ERROR" />
+	<logger name="org.richfaces" level="ERROR" />
+
+	<logger
+		name="account.com.iperia.vx.mg.gateway.impl.conn.TraceableSocketFactory"
+		level="TRACE" additivity="false">
+		<appender-ref ref="IMAPAccountAppender" />
+		<appender-ref ref="MGFileAppender" />
+	</logger>
+
+	<logger name="com.iperia.vx.security" level="DEBUG" additivity="false">
+		<appender-ref ref="AccountTransactionsAppender" />
+		<appender-ref ref="EmailAppender" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="org.hibernate" level="ERROR" />
+	<logger name="org.springframework" level="ERROR" />
+	<logger name="org.ajax4jsf" level="ERROR" />
+	<logger name="com.mchange" level="ERROR"></logger>
+	<logger name="ws.com.iperia" level="TRACE">
+		<appender-ref ref="WebServiceAppender"></appender-ref>
+	</logger>
+	<logger name="wsreq.com.iperia" level="TRACE">
+		<appender-ref ref="WSRequestLogAppender"></appender-ref>
+	</logger>
+	
+	<logger name="VFSGarbageCollector.logging" level="TRACE" additivity="false">
+		<appender-ref ref="VFSGCAppender"></appender-ref>
+		<appender-ref ref="STDOUT" />
+	</logger>
+	
+	<logger name="invalidate.find.cache" level="ERROR" additivity="false">
+		<appender-ref ref="InvalidateFindResponse"></appender-ref>
+		<appender-ref ref="STDOUT" />
+	</logger>
+	
+	<logger name="method.tracer" level="TRACE" additivity="false">
+		<appender-ref ref="MethodTracerAppender"></appender-ref>
+		<appender-ref ref="STDOUT" />
+	</logger>
+	
+</configuration>

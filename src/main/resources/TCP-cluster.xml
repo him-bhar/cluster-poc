@@ -1,0 +1,33 @@
+<config xmlns="urn:org:jgroups"
+
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+        xsi:schemaLocation="urn:org:jgroups http://www.jgroups.org/schema/JGroups-2.8.xsd">
+
+<TCP bind_port="7800" />
+
+<TCPPING timeout="3000"
+
+         initial_hosts="${jgroups.tcpping.initial_hosts:172.16.47.104[7800],172.16.47.104[7801]}"
+
+         port_range="1"
+
+         num_initial_members="3"/>
+
+<VERIFY_SUSPECT timeout="1500"  />
+
+<pbcast.NAKACK use_mcast_xmit="false"
+
+               retransmit_timeout="300,600,1200,2400,4800"
+
+               discard_delivered_msgs="true"/>
+
+<pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000"
+
+               max_bytes="400000"/>
+
+<pbcast.GMS print_local_addr="true" join_timeout="3000"
+
+               view_bundling="true"/>
+    
+</config>

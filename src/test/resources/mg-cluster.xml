@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd"
+>
+
+<!--     <bean id="ClusterInstance" class="com.iperia.vx.mg.cluster.ClusterInstance" factory-method="getInstance" -->
+<!--         depends-on="NodeRemoteExport"> -->
+<!--         <property name="nodeRegistry" ref="NodeRegistry"/> -->
+<!--         <property name="clusterExecutor" ref="ClusterExecutor"/> -->
+<!--         <property name="nodeConnections" ref="NodeConnections"/> -->
+<!--     </bean> -->
+    
+<!--     <bean id="NodeRegistry" class="com.iperia.vx.mg.cluster.NodeRegistry"> -->
+<!--         <property name="nodes"> -->
+<!--             <list> -->
+<!--                 <ref bean="Node1"/> -->
+<!--                 <ref bean="Node2"/> -->
+<!--                 <ref bean="Node3"/> -->
+<!--                 <ref bean="Node4"/> -->
+<!--                 <ref bean="Node5"/> -->
+<!--             </list> -->
+<!--         </property> -->
+<!--     </bean> -->
+    
+<!--     <bean id="NodeConnections" class="com.iperia.vx.mg.cluster.NodeConnections"> -->
+<!--         <property name="executorService" ref="ClusterExecutorService"/> -->
+<!--     </bean> -->
+
+<!--     <bean id="ClusterExecutor" class="com.iperia.vx.mg.cluster.ClusterExecutorImpl"> -->
+<!--         <property name="executorService" ref="ClusterExecutorService"/> -->
+<!--         <property name="nodeRegistry" ref="NodeRegistry"/> -->
+<!--         <property name="nodeConnections" ref="NodeConnections"/> -->
+<!--     </bean> -->
+    
+<!--     <bean id="NodeRemote" class="com.iperia.vx.mg.cluster.NodeRemoteObject"> -->
+<!--         <property name="thisNode" ref="Node${com.iperia.vx.mg.cluster.node.id}"/> -->
+<!--         <property name="nodeAccountsDAO" ref="nodeAccountDAO"/> -->
+<!--         <property name="securityService" ref="VXSecurityService"/> -->
+<!--         <property name="dbConnectionParams"> -->
+<!--             <bean class="com.iperia.vx.mg.cluster.DBConnectionParams"> -->
+<!--                 <property name="host" value="${com.iperia.vx.mg.db.host}"/> -->
+<!--                 <property name="port" value="${com.iperia.vx.mg.db.port}"/> -->
+<!--                 <property name="user" value="${com.iperia.vx.mg.db.name}"/> -->
+<!--                 <property name="password" value="${com.iperia.vx.mg.db.password}"/> -->
+<!--             </bean> -->
+<!--         </property> -->
+<!--     </bean> -->
+
+<!--     <bean id="NodeRemoteExport" class="org.springframework.remoting.rmi.RmiServiceExporter"> -->
+<!--         VVMGatewayMonitor -->
+<!--         <property name="serviceName" value="MGNode"/> -->
+<!--         <property name="service" ref="NodeRemote"/> -->
+<!--         <property name="serviceInterface" value="com.iperia.vx.mg.cluster.NodeRemote"/> -->
+<!--         <property name="registryHost" value="${com.iperia.vx.mg.rmi-registry.host}"/> -->
+<!--         <property name="registryPort" value="${com.iperia.vx.mg.rmi-registry.port}"/> -->
+<!--     </bean> -->
+    
+<!--     <bean id="Node1" class="com.iperia.vx.mg.cluster.NodeDescription"> -->
+<!--         <property name="nodeId" value="${com.iperia.vx.mg.cluster.node.1.id}"/> -->
+<!--         <property name="enabled" value="${com.iperia.vx.mg.cluster.node.1.enabled}"/> -->
+<!--         <property name="registryHost" value="${com.iperia.vx.mg.cluster.node.1.rmi-registry.host}"/> -->
+<!--         <property name="registryPort" value="${com.iperia.vx.mg.cluster.node.1.rmi-registry.port}"/> -->
+<!--     </bean> -->
+    
+<!--     <bean id="Node2" class="com.iperia.vx.mg.cluster.NodeDescription"> -->
+<!--         <property name="nodeId" value="${com.iperia.vx.mg.cluster.node.2.id}"/> -->
+<!--         <property name="enabled" value="${com.iperia.vx.mg.cluster.node.2.enabled}"/> -->
+<!--         <property name="registryHost" value="${com.iperia.vx.mg.cluster.node.2.rmi-registry.host}"/> -->
+<!--         <property name="registryPort" value="${com.iperia.vx.mg.cluster.node.2.rmi-registry.port}"/> -->
+<!--     </bean> -->
+    
+<!--     <bean id="Node3" class="com.iperia.vx.mg.cluster.NodeDescription"> -->
+<!--         <property name="nodeId" value="${com.iperia.vx.mg.cluster.node.3.id}"/> -->
+<!--         <property name="enabled" value="${com.iperia.vx.mg.cluster.node.3.enabled}"/> -->
+<!--         <property name="registryHost" value="${com.iperia.vx.mg.cluster.node.3.rmi-registry.host}"/> -->
+<!--         <property name="registryPort" value="${com.iperia.vx.mg.cluster.node.3.rmi-registry.port}"/> -->
+<!--     </bean> -->
+    
+<!--     <bean id="Node4" class="com.iperia.vx.mg.cluster.NodeDescription"> -->
+<!--         <property name="nodeId" value="${com.iperia.vx.mg.cluster.node.4.id}"/> -->
+<!--         <property name="enabled" value="${com.iperia.vx.mg.cluster.node.4.enabled}"/> -->
+<!--         <property name="registryHost" value="${com.iperia.vx.mg.cluster.node.4.rmi-registry.host}"/> -->
+<!--         <property name="registryPort" value="${com.iperia.vx.mg.cluster.node.4.rmi-registry.port}"/> -->
+<!--     </bean> -->
+    
+<!--     <bean id="Node5" class="com.iperia.vx.mg.cluster.NodeDescription"> -->
+<!--         <property name="nodeId" value="${com.iperia.vx.mg.cluster.node.5.id}"/> -->
+<!--         <property name="enabled" value="${com.iperia.vx.mg.cluster.node.5.enabled}"/> -->
+<!--         <property name="registryHost" value="${com.iperia.vx.mg.cluster.node.5.rmi-registry.host}"/> -->
+<!--         <property name="registryPort" value="${com.iperia.vx.mg.cluster.node.5.rmi-registry.port}"/> -->
+<!--     </bean> -->
+    
+    <bean id="cluster" class="com.himanshu.cluster.impl.JGroupsClusterImpl" init-method="prepareCluster">
+    	<property name="configLocation" value="classpath:/cluster-new.xml"></property>
+<!-- 		<property name="configLocation" value="classpath:/TCP-cluster.xml"></property> -->
+		<property name="clusterName" value="himanshu"></property>
+    </bean>
+    
+    <bean id="jobBombarder" class="com.himanshu.cluster.test.JobBombarder" init-method="startBombing" depends-on="cluster">
+    	<property name="cluster" ref="cluster"></property>
+    </bean>
+    
+    <bean id="clusterMBean" class="com.himanshu.cluster.mbean.ClusterMBeanImpl" init-method="init" depends-on="cluster">
+    	<property name="cluster" ref="cluster"></property>
+    </bean>
+    
+</beans>
